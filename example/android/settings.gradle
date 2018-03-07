@@ -1,0 +1,6 @@
+rootProject.name = 'ActionSheetExample'
+
+include ':app'
+
+include ':react-native-action-sheet'
+project(':react-native-action-sheet').projectDir = new File(rootProject.projectDir, '../../android')

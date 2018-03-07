@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#10000000">
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="#ffffff" />
+                </shape>
+            </item>
+            <item android:drawable="@drawable/react_native_action_sheet_button_border"/>
+        </layer-list>
+    </item>
+</ripple>
