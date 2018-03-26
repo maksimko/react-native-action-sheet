@@ -1,16 +1,17 @@
 package com.mabo.actionsheet;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Bundle;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
+import android.util.Log;
 
+import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -18,13 +19,17 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by maksim on 2/19/18.
  */
 
 public class ActionSheetModule extends ReactContextBaseJavaModule {
-    protected boolean isShown;
+    private static final int REQUEST_CODE = 4236543;
+
+    private Sheet sheet;
+    private List<Intent> shareReceiversList = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -37,170 +42,125 @@ public class ActionSheetModule extends ReactContextBaseJavaModule {
 
     @SuppressWarnings("unused")
     @ReactMethod
-    public void showActionSheetWithOptions(ReadableMap parameters, final Callback callback) {
-        if (isShown) { return; }
-
-        isShown = true;
-
-        ArrayList<Object> options = new ArrayList<>();
-        String title = null;
-        Integer cancelIndex = null;
-
-        if (parameters.hasKey("options")) {
-            options = parameters.getArray("options").toArrayList();
+    public void showActionSheetWithOptions(@NonNull ReadableMap parameters, @Nullable final Callback callback) {
+        if (sheet != null && sheet.isShowing()) {
+            return;
         }
 
-        if (parameters.hasKey("title")) {
-            title = parameters.getString("title");
+        Activity currentActivity = getReactApplicationContext().getCurrentActivity();
+
+        if (currentActivity == null) { return; }
+
+        (sheet = new Sheet(currentActivity, parameters, callback)).show();
+    }
+
+    @SuppressWarnings("unused")
+    @ReactMethod
+    public void showShareActionSheetWithOptions(@NonNull ReadableMap parameters, @Nullable final Callback failureCallback, @Nullable final Callback successCallback) {
+        ArrayList<Object> inclusionList = MapUtils.get(parameters, "android.includedActivityTypes", new ArrayList<>());
+        ArrayList<Object> exclusionList = MapUtils.get(parameters, "excludedActivityTypes", new ArrayList<>());
+        String subject = MapUtils.get(parameters, "subject");
+        String message = MapUtils.get(parameters, "message");
+        String url = MapUtils.get(parameters, "url");
+        String dialogTitle = MapUtils.get(parameters, "android.dialogTitle");
+
+        Activity currentActivity = getCurrentActivity();
+
+        if (currentActivity == null) {
+            if (failureCallback != null) {
+                failureCallback.invoke();
+            }
+            return;
         }
 
-        if (parameters.hasKey("cancelButtonIndex")) {
-            cancelIndex = parameters.getInt("cancelButtonIndex");
+        Intent intent =
+                ShareCompat.IntentBuilder
+                .from(currentActivity)
+                .setType("text/plain")
+                .setSubject(subject)
+                .setText(String.format("%s %s", message, url))
+                .setChooserTitle(dialogTitle)
+                .getIntent();
+
+        PackageManager pm = getCurrentActivity().getPackageManager();
+
+        if (intent.resolveActivity(pm) == null) {
+            if (failureCallback != null) {
+                failureCallback.invoke();
+            }
+            return;
         }
 
-        Sheet sheet = new Sheet(getReactApplicationContext().getCurrentActivity())
-                .withParameters(options, title, cancelIndex, callback);
+        if (shareReceiversList.isEmpty()) {
+            List<ResolveInfo> resInfo = pm.queryIntentActivities(intent, 0);
 
+            for(int i = 0; i < resInfo.size(); i++) {
+                ResolveInfo info = resInfo.get(i);
 
-        sheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                String packageName = info.activityInfo.packageName;
+
+                Intent specificIntent = new Intent(intent);
+                specificIntent.setComponent(new ComponentName(packageName, info.activityInfo.name));
+                specificIntent.setPackage(packageName);
+                shareReceiversList.add(specificIntent);
+            }
+        }
+
+        if (BuildConfig.DEBUG) {
+            StringBuilder stringBuilder = new StringBuilder("Available actions: ");
+
+            for (int i = 0; i < shareReceiversList.size(); i++) {
+                Intent foundIntent = shareReceiversList.get(i);
+                stringBuilder.append(foundIntent.getPackage()).append(", ");
+            }
+
+            Log.d("ActionSheetModule", stringBuilder.toString().trim());
+        }
+
+        ArrayList<Intent> intentList = new ArrayList<>();
+
+        for(int i = 0; i < shareReceiversList.size(); i++) {
+            Intent foundIntent = shareReceiversList.get(i);
+
+            if (!inclusionList.isEmpty() && !inclusionList.contains(foundIntent.getPackage())) {
+                continue;
+            }
+
+            if (exclusionList.contains(foundIntent.getPackage())) {
+                continue;
+            }
+
+            intentList.add(foundIntent);
+        }
+
+        if (shareReceiversList.isEmpty()) {
+            if (failureCallback != null) {
+                failureCallback.invoke();
+            }
+            return;
+        }
+
+        getReactApplicationContext().addActivityEventListener(new ActivityEventListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                isShown = false;
+            public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+                if (requestCode != REQUEST_CODE) {
+                    return;
+                }
+
+                if (resultCode == Activity.RESULT_OK && successCallback != null) {
+                    successCallback.invoke();
+                } else if (failureCallback != null) {
+                    failureCallback.invoke();
+                }
+            }
+
+            @Override
+            public void onNewIntent(Intent intent) {
             }
         });
 
-        sheet.show();
-    }
-
-    private class Sheet extends BottomSheetDialog {
-        private String title;
-        private Integer cancelIndex;
-        private Object cancelOption;
-        private ArrayList<Object> options;
-        private Callback callback;
-
-        private RecyclerView.Adapter adapter;
-
-        public Sheet(@NonNull Context context) {
-            super(context, R.style.ActionSheet);
-        }
-
-        public Sheet(@NonNull Context context, int theme) {
-            super(context, theme);
-        }
-
-        public Sheet(@NonNull Context context, boolean cancelable, OnCancelListener cancelListener) {
-            super(context, cancelable, cancelListener);
-        }
-
-        public Sheet withParameters(final ArrayList<Object> options, final String title, final Integer cancelIndex, final Callback callback) {
-            this.title = title;
-            this.options = options;
-            this.callback = callback;
-            this.cancelIndex = cancelIndex;
-
-            if (cancelIndex != null) {
-                cancelOption = options.remove(cancelIndex.intValue());
-            }
-
-            this.adapter = new RecyclerView.Adapter<TextVH>() {
-                @Override
-                public TextVH onCreateViewHolder(ViewGroup parent, int viewType) {
-                    View view = getLayoutInflater().inflate(R.layout.react_native_action_sheet_option, parent, false);
-                    return new TextVH(view);
-                }
-
-                @Override
-                public void onBindViewHolder(TextVH holder, final int position) {
-                    Object option = options.get(position);
-
-                    holder.bind((String)option);
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                           @Override
-                           public void onClick(View v) {
-                               int actualPosition = position;
-
-                               if (cancelIndex != null && cancelIndex <= position) {
-                                   actualPosition = position + 1;
-                               }
-
-                               dismiss();
-                               callback.invoke(actualPosition);
-                           }
-                       });
-                }
-
-                @Override
-                public int getItemCount() {
-                    return options.size();
-                }
-            };
-
-            return this;
-        }
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            View view  = getLayoutInflater().inflate(R.layout.react_native_action_sheet, null);
-
-            setContentView(view);
-            setupViews(view);
-        }
-
-        class Manager extends LinearLayoutManager {
-            public Manager(Context context) {
-                super(context, LinearLayoutManager.VERTICAL, false);
-            }
-
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        }
-
-        private void setupViews(View rootView) {
-            RecyclerView list = rootView.findViewById(R.id.options_list);
-            list.setLayoutManager(new Manager(getContext()));
-            list.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
-            if (cancelOption != null) {
-                TextView cancelButton = rootView.findViewById(R.id.cancel_button);
-                cancelButton.setText((String)cancelOption);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dismiss();
-                        callback.invoke(cancelIndex);
-                    }
-                });
-                cancelButton.setVisibility(View.VISIBLE);
-            }
-        }
-
-
-
-
-
-
-
-
-
-        private class TextVH extends RecyclerView.ViewHolder {
-            public TextVH(View itemView) {
-                super(itemView);
-            }
-
-            public void bind(String text) {
-                ((TextView)itemView).setText(text);
-            }
-        }
+        Intent chooserIntent = Intent.createChooser(intentList.remove(0), dialogTitle);
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+        getCurrentActivity().startActivityForResult(chooserIntent, REQUEST_CODE);
     }
 }

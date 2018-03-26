@@ -1,0 +1,13 @@
+<resources>
+    <color name="react_native_action_primaryColor">#FFFFFF</color>
+    <color name="react_native_action_primaryColorDark">#F2F2F2</color>
+    <color name="react_native_action_header">#F4F5F6</color>
+    <color name="react_native_action_text">#000000</color>
+    <color name="react_native_action_option">#000000</color>
+    <color name="react_native_action_message">#696868</color>
+    <color name="react_native_action_sheet_divider">#D3D6D8</color>
+    <color name="react_native_action_button_divider">#EBEBEB</color>
+    <color name="react_native_action_button">#D3D6D8</color>
+    <color name="react_native_action_cancel_button">#D3D6D8</color>
+    <color name="react_native_action_destructive_button">#D3D6D8</color>
+</resources>

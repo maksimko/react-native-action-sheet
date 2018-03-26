@@ -1,5 +1,6 @@
 package com.actionsheetexample;
 
+import android.content.Intent;
 import android.view.View;
 
 import com.facebook.react.ReactActivity;
@@ -22,7 +23,7 @@ public class MainActivity extends ReactActivity {
         getWindow().getDecorView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainApplication)getApplication()).getReactNativeHost().getReactInstanceManager().showDevOptionsDialog();
+                ((MainApplication) getApplication()).getReactNativeHost().getReactInstanceManager().showDevOptionsDialog();
             }
         });
     }
