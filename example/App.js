@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react'
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   NativeModules
-} from "react-native";
-import ActionSheet from "react-native-action-sheet";
+} from 'react-native'
+import ActionSheet from 'react-native-action-sheet'
 
 const ActionSheetButton = ({ title, additionalParams }) => (
   <TouchableOpacity
@@ -14,7 +14,7 @@ const ActionSheetButton = ({ title, additionalParams }) => (
     onPress={() => {
       ActionSheet.showActionSheetWithOptions(
         {
-          options: ["Choose from library", "Take photo"],
+          options: ['Choose from library', 'Take photo'],
           ...additionalParams
         },
         buttonIndex => {
@@ -23,15 +23,15 @@ const ActionSheetButton = ({ title, additionalParams }) => (
             case 1:
             case 2:
             default:
-              break;
+              break
           }
         }
-      );
+      )
     }}
   >
-    <Text style={styles.text}>{title || "Show ActionSheet"}</Text>
+    <Text style={styles.text}>{title || 'Show ActionSheet'}</Text>
   </TouchableOpacity>
-);
+)
 export default class App extends React.Component {
   render() {
     return (
@@ -40,41 +40,41 @@ export default class App extends React.Component {
         <ActionSheetButton
           title="with cancel"
           additionalParams={{
-            options: ["Cancel", "Choose from library", "Take photo"],
+            options: ['Cancel', 'Choose from library', 'Take photo'],
             cancelButtonIndex: 0
           }}
         />
         <ActionSheetButton
           title="with title"
-          additionalParams={{ title: "Change profile photo" }}
+          additionalParams={{ title: 'Change profile photo' }}
         />
         <ActionSheetButton
           title="with message"
           additionalParams={{
-            title: "Change profile photo",
-            message: "Please select appropriate photo ot you"
+            title: 'Change profile photo',
+            message: 'Please select appropriate photo ot you'
           }}
         />
         <ActionSheetButton
           title="with header color"
           additionalParams={{
-            title: "Change profile photo",
-            message: "Please select appropriate photo ot you",
-            android: { headerColor: "#BAFF94", headerTextColor: "#5A5959" }
+            title: 'Change profile photo',
+            message: 'Please select appropriate photo ot you',
+            android: { headerColor: '#BAFF94', headerTextColor: '#5A5959' }
           }}
         />
         <ActionSheetButton
           title="with dark header"
           additionalParams={{
-            title: "Change profile photo",
-            message: "Please select appropriate photo ot you",
-            android: { headerColor: "#2C3E50" }
+            title: 'Change profile photo',
+            message: 'Please select appropriate photo ot you',
+            android: { headerColor: '#2C3E50' }
           }}
         />
         <ActionSheetButton
           title="with desctructive button"
           additionalParams={{
-            options: ["First", "Second", "Remove"],
+            options: ['First', 'Second', 'Remove'],
             destructiveButtonIndex: 2
           }}
         />
@@ -83,12 +83,12 @@ export default class App extends React.Component {
           onPress={() => {
             ActionSheet.showShareActionSheetWithOptions(
               {
-                url: "wow://url",
-                subject: "Title",
-                message: "Message",
-                excludedActivityTypes: ["com.android.bluetooth"],
+                url: 'wow://url',
+                subject: 'Title',
+                message: 'Message',
+                excludedActivityTypes: ['com.android.bluetooth'],
                 android: {
-                  dialogTitle: "Share with",
+                  dialogTitle: 'Share with',
                   includedActivityTypes: [
                     //   "com.facebook.katana",
                     //   "com.ghisler.android.TotalCommander"
@@ -97,34 +97,34 @@ export default class App extends React.Component {
               },
               () => {},
               () => {}
-            );
+            )
           }}
         >
           <Text style={styles.text}>Show Share</Text>
         </TouchableOpacity>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   button: {
-    width: "70%",
+    width: '70%',
     height: 48,
     marginVertical: 6,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "blue"
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'blue'
   },
   text: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 17,
-    fontWeight: "500"
+    fontWeight: '500'
   }
-});
+})
