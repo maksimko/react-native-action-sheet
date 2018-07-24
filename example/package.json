@@ -10,15 +10,14 @@
   "scripts": {
     "start": "(adb reverse tcp:8081 tcp:8081 || true) && react-native start",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "test": "node node_modules/jest/bin/jest.js"
+    "ios": "react-native run-ios"
   },
   "jest": {
     "preset": "react-native"
   },
   "dependencies": {
-    "react": "16.2.0",
-    "react-native": "0.52.0",
+    "react": "16.4.1",
+    "react-native": "0.56.0",
     "react-native-action-sheet": "../"
   }
 }
