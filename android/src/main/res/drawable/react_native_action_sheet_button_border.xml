@@ -3,8 +3,8 @@
     <item android:top="-2dp" android:right="-2dp" android:left="-2dp">
         <shape>
             <stroke
-                android:width="1dp"
-                android:color="@color/react_native_action_button_divider" />
+                android:width="1px"
+                android:color="@color/react_native_action_sheet_divider" />
         </shape>
     </item>
 </layer-list>

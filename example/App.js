@@ -60,7 +60,7 @@ export default class App extends React.Component {
           additionalParams={{
             title: 'Change profile photo',
             message: 'Please select appropriate photo ot you',
-            android: { headerColor: '#BAFF94', headerTextColor: '#5A5959' }
+            android: { header: { color: '#BAFF94', textColor: '#5A5959' } }
           }}
         />
         <ActionSheetButton
@@ -68,7 +68,7 @@ export default class App extends React.Component {
           additionalParams={{
             title: 'Change profile photo',
             message: 'Please select appropriate photo ot you',
-            android: { headerColor: '#2C3E50' }
+            android: { header: { color: '#2C3E50' } }
           }}
         />
         <ActionSheetButton
