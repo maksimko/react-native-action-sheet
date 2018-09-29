@@ -8,14 +8,14 @@ import {
 } from 'react-native'
 import ActionSheet from 'react-native-action-sheet'
 
-const ActionSheetButton = ({ title, additionalParams }) => (
+const ActionSheetButton = ({ title, actionSheetParams }) => (
   <TouchableOpacity
     style={styles.button}
     onPress={() => {
       ActionSheet.showActionSheetWithOptions(
         {
-          options: ['Choose from library', 'Take photo'],
-          ...additionalParams
+          options: ['Choose from library', 'Take a photo'],
+          ...actionSheetParams
         },
         buttonIndex => {
           switch (buttonIndex) {
@@ -39,25 +39,25 @@ export default class App extends React.Component {
         <ActionSheetButton title="2 options" />
         <ActionSheetButton
           title="with cancel"
-          additionalParams={{
+          actionSheetParams={{
             options: ['Cancel', 'Choose from library', 'Take photo'],
             cancelButtonIndex: 0
           }}
         />
         <ActionSheetButton
           title="with title"
-          additionalParams={{ title: 'Change profile photo' }}
+          actionSheetParams={{ title: 'Change profile photo' }}
         />
         <ActionSheetButton
           title="with message"
-          additionalParams={{
+          actionSheetParams={{
             title: 'Change profile photo',
             message: 'Please select appropriate photo ot you'
           }}
         />
         <ActionSheetButton
           title="with header color"
-          additionalParams={{
+          actionSheetParams={{
             title: 'Change profile photo',
             message: 'Please select appropriate photo ot you',
             android: { header: { color: '#BAFF94', textColor: '#5A5959' } }
@@ -65,7 +65,7 @@ export default class App extends React.Component {
         />
         <ActionSheetButton
           title="with dark header"
-          additionalParams={{
+          actionSheetParams={{
             title: 'Change profile photo',
             message: 'Please select appropriate photo ot you',
             android: { header: { color: '#2C3E50' } }
@@ -73,7 +73,7 @@ export default class App extends React.Component {
         />
         <ActionSheetButton
           title="with desctructive button"
-          additionalParams={{
+          actionSheetParams={{
             options: ['First', 'Second', 'Remove'],
             destructiveButtonIndex: 2
           }}
@@ -83,15 +83,15 @@ export default class App extends React.Component {
           onPress={() => {
             ActionSheet.showShareActionSheetWithOptions(
               {
-                url: 'wow://url',
-                subject: 'Title',
-                message: 'Message',
+                url: 'https://www.google.com',
+                subject: 'You search engine',
+                message: "It's popular",
                 excludedActivityTypes: ['com.android.bluetooth'],
                 android: {
                   dialogTitle: 'Share with',
                   includedActivityTypes: [
-                    //   "com.facebook.katana",
-                    //   "com.ghisler.android.TotalCommander"
+                    'com.facebook.katana',
+                    'com.ghisler.android.TotalCommander'
                   ]
                 }
               },
