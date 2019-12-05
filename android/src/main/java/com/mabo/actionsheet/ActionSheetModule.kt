@@ -6,9 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Parcelable
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.ShareCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.core.app.ShareCompat
 import android.util.Log
 
 import com.facebook.react.bridge.ActivityEventListener
@@ -62,13 +62,16 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
             return
         }
 
-        val intent = ShareCompat.IntentBuilder
+        val intentBuilder = ShareCompat.IntentBuilder
                 .from(currentActivity)
                 .setType("text/plain")
-                .setSubject(subject)
-                .setText(String.format("%s %s", message, url))
-                .setChooserTitle(dialogTitle)
-                .intent
+                .setText(url)
+
+        dialogTitle.let { intentBuilder.setChooserTitle(it) }
+        subject.let { intentBuilder.setSubject(it) }
+        message.let { intentBuilder.setText(String.format("%s %s", message, url)) }
+
+        val intent = intentBuilder.intent
 
         val pm = currentActivity?.packageManager ?: return
 
@@ -133,6 +136,8 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
                 if (resultCode == Activity.RESULT_OK && successCallback != null) {
                     successCallback.invoke()
                 } else failureCallback?.invoke()
+
+                reactApplicationContext.removeActivityEventListener(this)
             }
 
             override fun onNewIntent(intent: Intent) {}
@@ -144,6 +149,6 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
     }
 
     companion object {
-        private val REQUEST_CODE = 4236543
+        private val REQUEST_CODE = 321
     }
 }
