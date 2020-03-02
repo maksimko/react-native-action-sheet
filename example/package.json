@@ -13,7 +13,7 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "react": "16.12.0",
+    "react": "16.13.0",
     "react-native": "0.61.5",
     "react-native-action-sheet": "../"
   }
