@@ -41,6 +41,9 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
         val headerHexColor = parameters.get<String>("android.header.color")
         val headerTextHexColor = parameters.get<String>("android.header.textColor")
         val tintHexColor = parameters.get<String>("tintColor")
+        val cancelable = parameters.get<Boolean>("cancelable", true)
+
+        this.setCancelable(cancelable)
 
         if (headerHexColor != null) {
             headerColor = Color.parseColor(headerHexColor)

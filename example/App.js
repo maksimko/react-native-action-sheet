@@ -8,6 +8,62 @@ import {
 } from "react-native";
 import ActionSheet from "react-native-action-sheet";
 
+function App() {
+  return (
+    <ScrollView
+      style={styles.scroll}
+      contentContainerStyle={styles.scrollContent}
+    >
+      <Section title="Action Sheet" />
+      <ActionSheetButton title="2 options" />
+      <ActionSheetButton
+        title="with cancel"
+        actionSheetParams={{
+          cancelable: false,
+          options: ["Cancel", "Choose from library", "Take photo"],
+          cancelButtonIndex: 0
+        }}
+      />
+      <ActionSheetButton
+        title="with title"
+        actionSheetParams={{ title: "Change profile photo" }}
+      />
+      <ActionSheetButton
+        title="with title and message"
+        actionSheetParams={{
+          title: "Change profile photo",
+          message: "Please select appropriate photo of you"
+        }}
+      />
+      <ActionSheetButton
+        title="with header color"
+        actionSheetParams={{
+          title: "Change profile photo",
+          message: "Please select appropriate photo of you",
+          android: { header: { color: "#BAFF94", textColor: "#5A5959" } }
+        }}
+      />
+      <ActionSheetButton
+        title="with dark header"
+        actionSheetParams={{
+          title: "Change profile photo",
+          message: "Please select appropriate photo of you",
+          android: { header: { color: "#2C3E50" } }
+        }}
+      />
+      <ActionSheetButton
+        title="with desctructive button"
+        actionSheetParams={{
+          options: ["First", "Second", "Remove"],
+          destructiveButtonIndex: 2
+        }}
+      />
+      <Section title="Share" />
+      <ShareButton />
+    </ScrollView>
+  );
+}
+
 const ActionSheetButton = ({ title, actionSheetParams }) => (
   <TouchableOpacity
     style={styles.button}
@@ -66,62 +122,6 @@ const Section = ({ title }) => (
     <Text style={styles.sectionTitle}>{title}</Text>
   </View>
 );
-export default class App extends React.Component {
-  render() {
-    return (
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <Section title="Action Sheet" />
-        <ActionSheetButton title="2 options" />
-        <ActionSheetButton
-          title="with cancel"
-          actionSheetParams={{
-            options: ["Cancel", "Choose from library", "Take photo"],
-            cancelButtonIndex: 0
-          }}
-        />
-        <ActionSheetButton
-          title="with title"
-          actionSheetParams={{ title: "Change profile photo" }}
-        />
-        <ActionSheetButton
-          title="with title and message"
-          actionSheetParams={{
-            title: "Change profile photo",
-            message: "Please select appropriate photo of you"
-          }}
-        />
-        <ActionSheetButton
-          title="with header color"
-          actionSheetParams={{
-            title: "Change profile photo",
-            message: "Please select appropriate photo of you",
-            android: { header: { color: "#BAFF94", textColor: "#5A5959" } }
-          }}
-        />
-        <ActionSheetButton
-          title="with dark header"
-          actionSheetParams={{
-            title: "Change profile photo",
-            message: "Please select appropriate photo of you",
-            android: { header: { color: "#2C3E50" } }
-          }}
-        />
-        <ActionSheetButton
-          title="with desctructive button"
-          actionSheetParams={{
-            options: ["First", "Second", "Remove"],
-            destructiveButtonIndex: 2
-          }}
-        />
-        <Section title="Share" />
-        <ShareButton />
-      </ScrollView>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   scroll: {
@@ -170,3 +170,5 @@ const styles = StyleSheet.create({
     color: "#dddccc"
   }
 });
+
+export default App;
