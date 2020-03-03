@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#5C1349",
+    backgroundColor: "#3B3B98",
     borderRadius: 8
   },
   shareButton: {},
