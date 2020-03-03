@@ -3,11 +3,11 @@ package com.mabo.actionsheet
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.ColorUtils
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
@@ -35,12 +35,15 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
     private var headerColor: Int? = null
     private var headerTextColor: Int? = null
     private var cancelOption: Any? = null
-    private val adapter: RecyclerView.Adapter<*>
+    private val adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>
 
     init {
         val headerHexColor = parameters.get<String>("android.header.color")
         val headerTextHexColor = parameters.get<String>("android.header.textColor")
         val tintHexColor = parameters.get<String>("tintColor")
+        val cancelable = parameters.get<Boolean>("cancelable", true)
+
+        this.setCancelable(cancelable)
 
         if (headerHexColor != null) {
             headerColor = Color.parseColor(headerHexColor)
@@ -58,7 +61,7 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
             cancelOption = options.removeAt(cancelIndex)
         }
 
-        this.adapter = object : RecyclerView.Adapter<TextVH>() {
+        this.adapter = object : androidx.recyclerview.widget.RecyclerView.Adapter<TextVH>() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextVH {
                 val view = layoutInflater.inflate(R.layout.react_native_action_sheet_option, parent, false)
                 return TextVH(view)
@@ -106,7 +109,7 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
         super.show()
     }
 
-    internal inner class Manager(context: Context) : LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false) {
+    internal inner class Manager(context: Context) : androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false) {
 
         override fun canScrollHorizontally(): Boolean {
             return false
@@ -135,7 +138,7 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
             messageTextView!!.visibility = View.GONE
         }
 
-        val list = rootView.findViewById<RecyclerView>(R.id.options_list)
+        val list = rootView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.options_list)
         list.layoutManager = Manager(context)
         list.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -171,7 +174,7 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
     }
 
 
-    private inner class TextVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private inner class TextVH(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         fun bind(text: String, isDestructive: Boolean) {
             val textView = itemView as TextView

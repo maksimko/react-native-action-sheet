@@ -6,9 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Parcelable
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.ShareCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.core.app.ShareCompat
 import android.util.Log
 
 import com.facebook.react.bridge.ActivityEventListener
@@ -48,8 +48,8 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
     @ReactMethod
     @Suppress("unused")
     fun showShareActionSheetWithOptions(parameters: ReadableMap, failureCallback: Callback?, successCallback: Callback?) {
-        val inclusionList = parameters.get("android.includedActivityTypes", ArrayList<Any>())
-        val exclusionList = parameters.get("excludedActivityTypes", ArrayList<Any>())
+        val inclusionList = parameters.get("android.includedActivityTypes", ArrayList<String>())
+        val exclusionList = parameters.get("excludedActivityTypes", ArrayList<String>())
         val subject = parameters.get<String>("subject")
         val message = parameters.get<String>("message")
         val url = parameters.get<String>("url")
@@ -62,13 +62,16 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
             return
         }
 
-        val intent = ShareCompat.IntentBuilder
+        val intentBuilder = ShareCompat.IntentBuilder
                 .from(currentActivity)
                 .setType("text/plain")
-                .setSubject(subject)
-                .setText(String.format("%s %s", message, url))
-                .setChooserTitle(dialogTitle)
-                .intent
+                .setText(url)
+
+        dialogTitle.let { intentBuilder.setChooserTitle(it) }
+        subject.let { intentBuilder.setSubject(it) }
+        message.let { intentBuilder.setText(String.format("%s %s", message, url)) }
+
+        val intent = intentBuilder.intent
 
         val pm = currentActivity?.packageManager ?: return
 
@@ -93,31 +96,38 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
         }
 
         if (BuildConfig.DEBUG) {
-            val stringBuilder = StringBuilder("Available actions: ")
-
-            for (i in shareReceiversList.indices) {
-                val foundIntent = shareReceiversList[i]
-                stringBuilder.append(foundIntent.getPackage()).append(", ")
+            val logMessage = shareReceiversList.fold(StringBuilder("Available actions: ")) {
+                sb, foundIntent -> sb.append(foundIntent.`package`).append(", ")
             }
-
-            Log.d("ActionSheetModule", stringBuilder.toString().trim { it <= ' ' })
+            Log.d("ActionSheetModule", logMessage.toString().trim { it <= ' ' })
         }
 
-        val intentList = ArrayList<Intent>()
-
-        for (i in shareReceiversList.indices) {
-            val foundIntent = shareReceiversList[i]
-
-            if (!inclusionList.isEmpty() && !inclusionList.contains(foundIntent.getPackage())) {
-                continue
+        val intentList = shareReceiversList.filter { foundIntent ->
+            if (inclusionList.isNotEmpty() && !inclusionList.contains(foundIntent.getPackage())) {
+                return@filter false
             }
 
             if (exclusionList.contains(foundIntent.getPackage())) {
-                continue
+                return@filter false
             }
 
-            intentList.add(foundIntent)
+            true
         }
+//                ArrayList<Intent>()
+//
+//        for (i in shareReceiversList.indices) {
+//            val foundIntent = shareReceiversList[i]
+//
+//            if (!inclusionList.isEmpty() && !inclusionList.contains(foundIntent.getPackage())) {
+//                continue
+//            }
+//
+//            if (exclusionList.contains(foundIntent.getPackage())) {
+//                continue
+//            }
+//
+//            intentList.add(foundIntent)
+//        }
 
         if (shareReceiversList.isEmpty()) {
             failureCallback?.invoke()
@@ -133,17 +143,19 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
                 if (resultCode == Activity.RESULT_OK && successCallback != null) {
                     successCallback.invoke()
                 } else failureCallback?.invoke()
+
+                reactApplicationContext.removeActivityEventListener(this)
             }
 
             override fun onNewIntent(intent: Intent) {}
         })
 
-        val chooserIntent = Intent.createChooser(intentList.removeAt(0), dialogTitle)
+        val chooserIntent = Intent.createChooser(intentList.first(), dialogTitle)
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toTypedArray<Parcelable>())
         getCurrentActivity()!!.startActivityForResult(chooserIntent, REQUEST_CODE)
     }
 
     companion object {
-        private val REQUEST_CODE = 4236543
+        private const val REQUEST_CODE = 32134
     }
 }
