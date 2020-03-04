@@ -19,9 +19,6 @@ function App() {
       <ActionSheetButton
         title="with cancel"
         actionSheetParams={{
-          android: {
-            cancelable: false
-          },
           options: ["Cancel", "Choose from library", "Take photo"],
           cancelButtonIndex: 0
         }}
@@ -57,7 +54,10 @@ function App() {
         title="with desctructive button"
         actionSheetParams={{
           options: ["First", "Second", "Remove"],
-          destructiveButtonIndex: 2
+          destructiveButtonIndex: 2,
+          android: {
+            cancelable: false
+          }
         }}
       />
       <Section title="Share" />
