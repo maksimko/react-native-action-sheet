@@ -6,6 +6,8 @@ ActionSheet for both Android and iOS.
 - Native Android implementation on BottomSheetDialog
 - iOS zero dependency (rely on ActionSheetIOS)
 
+![](/misc/variations.png)
+
 ## Installation
 
 ```sh

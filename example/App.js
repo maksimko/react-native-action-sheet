@@ -34,14 +34,14 @@ function App() {
         title="with title and message"
         actionSheetParams={{
           title: "Change profile photo",
-          message: "Please select appropriate photo of you"
+          message: "Choose your best ever photo 😉"
         }}
       />
       <ActionSheetButton
         title="with header color"
         actionSheetParams={{
           title: "Change profile photo",
-          message: "Please select appropriate photo of you",
+          message: "Choose your best ever photo 😉",
           android: { header: { color: "#BAFF94", textColor: "#5A5959" } }
         }}
       />
@@ -49,7 +49,7 @@ function App() {
         title="with dark header"
         actionSheetParams={{
           title: "Change profile photo",
-          message: "Please select appropriate photo of you",
+          message: "Choose your best ever photo 😉",
           android: { header: { color: "#2C3E50" } }
         }}
       />
