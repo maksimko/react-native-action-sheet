@@ -19,7 +19,9 @@ function App() {
       <ActionSheetButton
         title="with cancel"
         actionSheetParams={{
-          cancelable: false,
+          android: {
+            cancelable: false
+          },
           options: ["Cancel", "Choose from library", "Take photo"],
           cancelButtonIndex: 0
         }}

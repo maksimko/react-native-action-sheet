@@ -1,45 +1,67 @@
 # react-native-action-sheet
-Provides common interface in React Native to show ActionSheet on Android and iOS. 
-Interface is the same as [ActionSheetIOS.](https://facebook.github.io/react-native/docs/actionsheetios)
+
+ActionSheet for both Android and iOS.
+
+- Mimics [ActionSheetIOS](https://facebook.github.io/react-native/docs/actionsheetios) interface
+- Native Android implementation on BottomSheetDialog
+- iOS zero dependency (rely on ActionSheetIOS)
 
 ## Installation
-### iOS integration
+
+```sh
+yarn add react-native-action-sheet
+```
+
+## Linking
+
+#### Automatic
+
+```sh
+react-native link react-native-action-sheet
+```
+
+#### Manual
+
+**iOS integration**
 
 Nothings here. It uses ActionSheetIOS.
+Replace your imports of `ActionSheetIOS` to `import ActionSheet from "react-native-action-sheet"`
 
-### Android integration
+**Android integration**
 
-ReactNative project
-- Add dependency to package.json `yarn add react-native-action-sheet`
+**settings.gradle**
 
-Android project
-- Add project dependency
-  **settings.gradle**
-  ```gradle
-  include ':react-native-action-sheet'
-  project(':react-native-action-sheet').projectDir = new File(rootProject.projectDir, '../../android')
-  ```
+```groovy
+include ':react-native-action-sheet'
+project(':react-native-action-sheet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-action-sheet/android')
+```
 
-  **app.gradle**
-  ```gradle
-  dependencies {
-      ...
-      implementation project(':react-native-action-sheet')
-  }
-  ```
+**app.gradle**
 
-  **React native host**
-  ```Java
-  override fun getPackages(): List<ReactPackage> {
-      return Arrays.asList(
-              MainReactPackage(),
-              ActionSheetPackage()
-      )
-  }
-  ```
+```groovy
+dependencies {
+    ...
+    implementation project(':react-native-action-sheet')
+}
+```
+
+**Native App**
+
+```Java
+override fun getPackages(): List<ReactPackage> {
+    return Arrays.asList(
+            MainReactPackage(),
+            ActionSheetPackage()
+    )
+}
+```
 
 ## Usage
+
 ### React Native
+
+**ActionSheet**
+
 ```JavaScript
 import ActionSheet from 'react-native-action-sheet'
 ...
@@ -49,17 +71,19 @@ ActionSheet.showActionSheetWithOptions(
       cancelButtonIndex: 0,
       destructiveButtonIndex: 3,
       title: 'Change profile photo',
-      message: 'Please select appropriate photo ot you',
-      android: { 
-          header: { 
-              color: '#BAFF94',  
-              textColor: '#5A5959' 
-          } 
+      message: 'Please choose your best ever photo',
+      android: {
+          header: {
+              color: '#BAFF94',
+              textColor: '#5A5959'
+          }
       }
     },
     buttonIndex => {...}
   )
 ```
+
+**Sharing dialog**
 
 ```JavaScript
 import ActionSheet from 'react-native-action-sheet'
@@ -67,7 +91,7 @@ import ActionSheet from 'react-native-action-sheet'
 ActionSheet.showShareActionSheetWithOptions(
   {
     url: 'https://www.google.com',
-    subject: 'You search engine',
+    subject: 'Your search engine',
     message: "It's popular",
     excludedActivityTypes: ['com.android.bluetooth'],
     android: {
@@ -82,3 +106,24 @@ ActionSheet.showShareActionSheetWithOptions(
   () => {}  //Success callback
 )
 ```
+
+### Props
+
+Refer to [ActionSheetIOS](https://facebook.github.io/react-native/docs/actionsheetios)
+
+**Android only props** passed under `android` props key
+
+`ActionSheet.showActionSheetWithOptions`
+
+| Prop name    | Description                             | Type               | Required |
+| ------------ | --------------------------------------- | ------------------ | -------- |
+| `color`      | header background color                 | string (HEX value) | false    |
+| `textColor`  | header text color                       | string (HEX value) | false    |
+| `cancelable` | can be closed by taping outside: `true` | boolean            | false    |
+
+`ActionSheet.showShareActionSheetWithOptions`
+
+| Prop name               | Description                  | Type     | Required |
+| ----------------------- | ---------------------------- | -------- | -------- |
+| `dialogTitle`           | Android chooser dialog text  | string   | false    |
+| `includedActivityTypes` | Whitelist activities to show | string[] | false    |

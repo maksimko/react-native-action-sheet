@@ -1,22 +1,32 @@
 {
-  "name": "react-native-action-sheet",
+  "name": "@mabo/react-native-action-sheet",
   "version": "1.2.0",
   "description": "ActionSheet for Android in React Native. Provides common interface in React Native to show ActionSheet on Android and iOS.",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {},
+  "peerDependencies": {
+    "react-native": "*"
+  },
   "keywords": [
     "react",
     "react-native",
     "action sheet",
     "android",
     "ios",
-    "share action sheet"
+    "share action sheet",
+    "share dialog"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maksimko/react-native-action-sheet.git"
   },
+  "author": "Maksim Bolshakov",
+  "bugs": {
+    "url": "https://github.com/maksimko/react-native-action-sheet/issues"
+  },
+  "homepage": "https://github.com/maksimko/react-native-action-sheet#readme",
+  "license": "MIT",
   "files": [
     "index.d.ts",
     "index.js",
@@ -25,13 +35,7 @@
     "!android/.gitignore",
     "!android/.idea"
   ],
-  "author": "Maksim Bolshakov",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/maksimko/react-native-action-sheet/issues"
-  },
-  "homepage": "https://github.com/maksimko/react-native-action-sheet#readme",
-  "peerDependencies": {
-    "react-native": "*"
+  "publishConfig": {
+    "access": "public"
   }
 }
