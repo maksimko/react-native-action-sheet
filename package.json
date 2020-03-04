@@ -1,6 +1,6 @@
 {
   "name": "@msco/react-native-action-sheet",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "ActionSheet for Android in React Native. Provides common interface in React Native to show ActionSheet on Android and iOS.",
   "main": "index.js",
   "types": "index.d.ts",
