@@ -2,15 +2,16 @@ declare module "react-native-action-sheet" {
   export interface ActionSheetType {
     showActionSheetWithOptions: (
       options: {
-        title?: string;
         options: string[];
         cancelButtonIndex?: number;
         destructiveButtonIndex?: number;
+        title?: string;
         message?: string;
+        anchor?: number;
         tintColor?: string;
         android?: {
-          headerColor?: string;
-          headerTextColor?: string;
+          color?: string;
+          textColor?: string;
           cancelable?: boolean;
         };
       },
@@ -18,8 +19,8 @@ declare module "react-native-action-sheet" {
     ) => void;
     showShareActionSheetWithOptions: (
       options: {
-        message?: string;
         url?: string;
+        message?: string;
         subject?: string;
         excludedActivityTypes?: string[];
         android?: {
