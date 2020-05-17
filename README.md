@@ -11,7 +11,7 @@ ActionSheet for both Android and iOS.
 ## Installation
 
 ```sh
-yarn add react-native-action-sheet
+yarn add '@msco/react-native-action-sheet'
 ```
 
 ## Linking
