@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="ActionSheet" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="RN_ActionSheet" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowCloseOnTouchOutside">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -13,7 +13,7 @@
         <item name="colorPrimaryDark">@color/react_native_action_primaryColorDark</item>
     </style>
 
-    <style name="ActionSheet.Option">
+    <style name="RN_ActionSheet.Option">
         <item name="android:textColor">@color/react_native_action_sheet_black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:background">@drawable/react_native_action_sheet_button</item>
@@ -22,7 +22,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="ActionSheet.Header">
+    <style name="RN_ActionSheet.Header">
         <item name="android:textSize">17sp</item>
         <item name="android:singleLine">true</item>
         <item name="android:lines">1</item>
@@ -30,7 +30,7 @@
         <item name="android:textColor">@color/react_native_action_sheet_gray</item>
     </style>
 
-    <style name="ActionSheet.Header.Text">
+    <style name="RN_ActionSheet.Header.Text">
         <item name="android:textSize">14sp</item>
         <item name="android:maxLines">3</item>
         <item name="android:textFontWeight">400</item>
@@ -38,9 +38,9 @@
         <item name="android:textColor">@color/react_native_action_sheet_gray</item>
     </style>
 
-    <style name="ActionSheet.Option.Cancel" parent="ActionSheet.Option" />
+    <style name="RN_ActionSheet.Option.Cancel" parent="RN_ActionSheet.Option" />
 
-    <style name="ActionSheet.Divider">
+    <style name="RN_ActionSheet.Divider">
         <item name="android:layout_height">1px</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@color/react_native_action_sheet_divider</item>
