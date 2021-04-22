@@ -1,11 +1,15 @@
 package com.mabo.actionsheet
 
 import android.app.Activity
+import android.app.PendingIntent
+import android.content.ClipData
 import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Parcelable
+import android.service.chooser.ChooserTarget
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.core.app.ShareCompat
@@ -28,7 +32,6 @@ import java.util.ArrayList
 class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
     private var sheet: Sheet? = null
-    private val shareReceiversList = ArrayList<Intent>()
 
     override fun getName(): String {
         return "ActionSheet"
@@ -48,12 +51,13 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
     @ReactMethod
     @Suppress("unused")
     fun showShareActionSheetWithOptions(parameters: ReadableMap, failureCallback: Callback?, successCallback: Callback?) {
-        val inclusionList = parameters.get("android.includedActivityTypes", ArrayList<String>())
-        val exclusionList = parameters.get("excludedActivityTypes", ArrayList<String>())
+//        val inclusionList = parameters.get("android.includedActivityTypes", ArrayList<String>())
+//        val exclusionList = parameters.get("excludedActivityTypes", ArrayList<String>())
         val subject = parameters.get<String>("subject")
         val message = parameters.get<String>("message")
         val url = parameters.get<String>("url")
         val dialogTitle = parameters.get<String>("android.dialogTitle")
+//        val shareReceiversList = ArrayList<Intent>()
 
         val currentActivity = currentActivity
 
@@ -62,77 +66,66 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
             return
         }
 
+        val pm = currentActivity.packageManager ?: return
+
         val intentBuilder = ShareCompat.IntentBuilder
                 .from(currentActivity)
+                .setChooserTitle(dialogTitle ?: "")
+                .setSubject(subject ?: "")
                 .setType("text/plain")
-                .setText(url)
+                .setText(listOfNotNull(message, url).joinToString(" "))
 
-        dialogTitle.let { intentBuilder.setChooserTitle(it) }
-        subject.let { intentBuilder.setSubject(it) }
-        message.let { intentBuilder.setText(String.format("%s %s", message, url)) }
+        val shareIntent = intentBuilder.intent;
 
-        val intent = intentBuilder.intent
+//        shareIntent.clipData = ClipData.newRawUri("test", Uri.parse(url))
 
-        val pm = currentActivity?.packageManager ?: return
-
-        if (intent.resolveActivity(pm) == null) {
+        if (shareIntent.resolveActivity(pm) == null) {
             failureCallback?.invoke()
             return
         }
 
-        if (shareReceiversList.isEmpty()) {
-            val resInfo = pm.queryIntentActivities(intent, 0)
-
-            for (i in resInfo.indices) {
-                val info = resInfo[i]
-
-                val packageName = info.activityInfo.packageName
-
-                val specificIntent = Intent(intent)
-                specificIntent.component = ComponentName(packageName, info.activityInfo.name)
-                specificIntent.setPackage(packageName)
-                shareReceiversList.add(specificIntent)
-            }
-        }
-
-        if (BuildConfig.DEBUG) {
-            val logMessage = shareReceiversList.fold(StringBuilder("Available actions: ")) {
-                sb, foundIntent -> sb.append(foundIntent.`package`).append(", ")
-            }
-            Log.d("ActionSheetModule", logMessage.toString().trim { it <= ' ' })
-        }
-
-        val intentList = shareReceiversList.filter { foundIntent ->
-            if (inclusionList.isNotEmpty() && !inclusionList.contains(foundIntent.getPackage())) {
-                return@filter false
-            }
-
-            if (exclusionList.contains(foundIntent.getPackage())) {
-                return@filter false
-            }
-
-            true
-        }
-//                ArrayList<Intent>()
+//        val resInfo = pm.queryIntentActivities(shareIntent, 0)
 //
-//        for (i in shareReceiversList.indices) {
-//            val foundIntent = shareReceiversList[i]
+//        for (i in resInfo.indices) {
+//            val info = resInfo[i]
 //
-//            if (!inclusionList.isEmpty() && !inclusionList.contains(foundIntent.getPackage())) {
-//                continue
+//            val packageName = info.activityInfo.packageName
+//
+//            val specificIntent = Intent(shareIntent)
+//            specificIntent.component = ComponentName(packageName, info.activityInfo.name)
+//            specificIntent.setPackage(packageName)
+//            shareReceiversList.add(specificIntent)
+//        }
+//
+//        if (BuildConfig.DEBUG) {
+//            val logMessage = shareReceiversList.fold(StringBuilder("Available actions: ")) {
+//                sb, foundIntent -> sb.append(foundIntent.`package`).append(", ")
+//            }
+//            Log.d("ActionSheetModule", logMessage.toString().trim { it <= ' ' })
+//        }
+//
+//        val intentList = shareReceiversList.filter { foundIntent ->
+//            val foundPackage = foundIntent.`package`
+//
+//            if (foundPackage.isNullOrBlank()) {
+//                return@filter false
 //            }
 //
-//            if (exclusionList.contains(foundIntent.getPackage())) {
-//                continue
+//            if (inclusionList.isNotEmpty() && !inclusionList.contains(foundPackage)) {
+//                return@filter false
 //            }
 //
-//            intentList.add(foundIntent)
+//            if (exclusionList.isNotEmpty() && exclusionList.contains(foundPackage)) {
+//                return@filter false
+//            }
+//
+//            true
 //        }
 
-        if (shareReceiversList.isEmpty()) {
-            failureCallback?.invoke()
-            return
-        }
+//        if (shareReceiversList.isEmpty()) {
+//            failureCallback?.invoke()
+//            return
+//        }
 
         reactApplicationContext.addActivityEventListener(object : ActivityEventListener {
             override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
@@ -150,9 +143,7 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
             override fun onNewIntent(intent: Intent) {}
         })
 
-        val chooserIntent = Intent.createChooser(intentList.first(), dialogTitle)
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toTypedArray<Parcelable>())
-        getCurrentActivity()!!.startActivityForResult(chooserIntent, REQUEST_CODE)
+        currentActivity.startActivityForResult(intentBuilder.createChooserIntent(), REQUEST_CODE)
     }
 
     companion object {
