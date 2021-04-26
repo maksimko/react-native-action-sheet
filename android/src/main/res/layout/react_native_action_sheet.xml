@@ -21,14 +21,14 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/ActionSheet.Header"
+            style="@style/RN_ActionSheet.Header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Title" />
 
         <TextView
             android:id="@+id/message"
-            style="@style/ActionSheet.Header.Text"
+            style="@style/RN_ActionSheet.Header.Text"
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,7 +37,7 @@
 
     <View
         android:id="@+id/header_divider"
-        style="@style/ActionSheet.Divider" />
+        style="@style/RN_ActionSheet.Divider" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/options_list"
@@ -47,7 +47,7 @@
 
     <TextView
         android:id="@+id/cancel_button"
-        style="@style/ActionSheet.Option.Cancel"
+        style="@style/RN_ActionSheet.Option.Cancel"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="center"

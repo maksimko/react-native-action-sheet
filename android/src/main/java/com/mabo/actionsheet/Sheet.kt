@@ -24,7 +24,7 @@ import java.util.ArrayList
  * Created by maksim on 22/03/2018.
  */
 
-internal class Sheet(context: Context, parameters: ReadableMap, private val callback: Callback?) : BottomSheetDialog(context, R.style.ActionSheet) {
+internal class Sheet(context: Context, parameters: ReadableMap, private val callback: Callback?) : BottomSheetDialog(context, R.style.RN_ActionSheet) {
     private val title: String? = parameters.get<String>("title")
     private val message: String? = parameters.get<String>("message")
     private val cancelIndex: Int? = parameters.get<Int>("cancelButtonIndex")

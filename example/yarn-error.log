@@ -1,0 +1,47 @@
+Arguments: 
+  /Users/maksim/.nvm/versions/node/v14.15.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js
+
+PATH: 
+  /Users/maksim/.nvm/versions/node/v14.15.0/bin:/Users/maksim/.sdkman/candidates/java/current/bin:/usr/local/bin:/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home:/Users/maksim/Library/Android/sdk:/Users/maksim/.gradle/wrapper/dists/gradle-4.10-all/54ye4nru8k2rpf7xwj15he4fo/gradle-4.10:/Users/maksim/Library/Android/sdk/platform-tools:/Users/maksim/Library/Android/sdk/tools/bin:/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Library/Apple/usr/bin:/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home:/Users/maksim/Library/Android/sdk:/Users/maksim/.gradle/wrapper/dists/gradle-4.10-all/54ye4nru8k2rpf7xwj15he4fo/gradle-4.10:/Users/maksim/Library/Android/sdk/platform-tools:/Users/maksim/Library/Android/sdk/tools/bin:/Users/maksim/.rvm/bin:/Users/maksim/.rvm/bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  14.15.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOSPC: no space left on device, copyfile '/Users/maksim/Library/Caches/Yarn/v6/npm-react-native-action-sheet-1.2.0-d47b7c43-1746-4cbc-abc7-b6af2c6e0436-1619007275304/node_modules/react-native-action-sheet/example/node_modules/react-native-action-sheet/example/node_modules/react-native-action-sheet/example/node_modules/react-native-action-sheet/example/node_modules/metro-cache/src/index.js' -> '/Users/maksim/Projects/Sort/PersonalGit/ActionSheet/example/node_modules/react-native-action-sheet/example/node_modules/react-native-action-sheet/example/node_modules/react-native-action-sheet/example/node_modules/react-native-action-sheet/example/node_modules/metro-cache/src/index.js'
+
+npm manifest: 
+  {
+    "name": "ActionSheetExample",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {},
+    "scripts": {
+      "start": "(adb reverse tcp:8081 tcp:8081 || true) && react-native start",
+      "android": "react-native run-android",
+      "ios": "react-native run-ios",
+      "postinstall": "npx jetify"
+    },
+    "jest": {
+      "preset": "react-native"
+    },
+    "dependencies": {
+      "react": "17.0.1",
+      "react-native": "0.64.0",
+      "@babel/core": "^7.12.9",
+      "@babel/runtime": "^7.12.5",
+      "react-native-action-sheet": "../"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
