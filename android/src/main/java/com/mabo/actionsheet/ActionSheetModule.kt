@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.os.Parcelable
 import android.service.chooser.ChooserTarget
 import androidx.fragment.app.FragmentActivity
@@ -32,6 +34,7 @@ import java.util.ArrayList
 class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
     private var sheet: Sheet? = null
+    private var handler: Handler = Handler(Looper.getMainLooper())
 
     override fun getName(): String {
         return "ActionSheet"
@@ -44,8 +47,10 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
 
         val currentActivity = reactApplicationContext.currentActivity ?: return
 
-        sheet = Sheet(currentActivity, parameters, callback)
-        sheet!!.show()
+        handler.post {
+            sheet = Sheet(currentActivity, parameters, callback)
+            sheet!!.show()
+        }
     }
 
     @ReactMethod
