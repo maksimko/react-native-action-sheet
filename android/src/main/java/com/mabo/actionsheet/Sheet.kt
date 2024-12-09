@@ -144,7 +144,7 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
         adapter.notifyDataSetChanged()
 
         headerColor?.let { color ->
-            rootView.findViewById<View>(R.id.header_divider)?.setBackgroundColor(ColorUtil.multiplyColorAlpha(color, 76))
+            rootView.findViewById<View>(R.id.header_divider)?.setBackgroundColor(ColorUtil.normalize(r = Color.red(color).toDouble(), g = Color.green(color).toDouble(), b = Color.blue(color).toDouble(), a = 76.0))
 
             findViewById<View>(R.id.header)?.setBackgroundColor(color)
 
