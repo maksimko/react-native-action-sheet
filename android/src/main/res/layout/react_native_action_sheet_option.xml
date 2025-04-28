@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:tools="http://schemas.android.com/tools"
-    style="@style/RN_ActionSheet.Option"
-    tools:text="Option" />
+<LinearLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/text"
+        style="@style/RN_ActionSheet.Option"
+        tools:text="Option" />
+    <View android:id="@+id/divider" style="@style/RN_ActionSheet.Option.Divider" />
+</LinearLayout>

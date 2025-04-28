@@ -11,7 +11,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="3dp"
     android:background="@drawable/react_native_action_sheet_card">
 
     <LinearLayout
@@ -19,11 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:minHeight="72dp"
         android:orientation="vertical"
         android:paddingTop="14dp"
-        android:paddingBottom="14dp"
-        android:paddingHorizontal="16dp"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -32,6 +28,7 @@
             style="@style/RN_ActionSheet.Header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
             tools:text="Title" />
 
         <TextView
@@ -40,12 +37,11 @@
             android:layout_marginTop="4dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
             tools:text="Subtitle" />
-    </LinearLayout>
 
-    <View
-        android:id="@+id/header_divider"
-        style="@style/RN_ActionSheet.Divider" />
+        <View style="@style/RN_ActionSheet.Divider" android:layout_marginTop="16dp"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/options_list"

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -56,13 +57,13 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
       cancelOption = options.removeAt(cancelIndex)
     }
 
-    this.adapter = object : RecyclerView.Adapter<TextVH>() {
-      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextVH {
+    this.adapter = object : RecyclerView.Adapter<OptionVH>() {
+      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionVH {
         val view = layoutInflater.inflate(R.layout.react_native_action_sheet_option, parent, false)
-        return TextVH(view)
+        return OptionVH(view)
       }
 
-      override fun onBindViewHolder(holder: TextVH, position: Int) {
+      override fun onBindViewHolder(holder: OptionVH, position: Int) {
         val option = options[position]
 
         val actualPosition =
@@ -70,8 +71,9 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
 
         val isDestructive = destructiveIndex != null && actualPosition == destructiveIndex
         val isDisabled = disabledButtonIndices.contains(actualPosition)
+        val isLastItem = position == options.size - 1
 
-        holder.bind(option, isDestructive, isDisabled)
+        holder.bind(option, isDestructive, isDisabled, isLastItem)
 
         if (!isDisabled) {
           holder.itemView.setOnClickListener {
@@ -132,7 +134,6 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
     val messageTextView = sheetViewBindings.message
     val headerView = sheetViewBindings.header
     val optionsList = sheetViewBindings.optionsList
-    val headerDivider = sheetViewBindings.headerDivider
     val cancelButton = sheetViewBindings.cancelButton
 
     titleTextView.setTypeface(null, Typeface.BOLD)
@@ -156,10 +157,6 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
 
     adapter.notifyDataSetChanged()
 
-    if (title == null && message == null) {
-      headerDivider.visibility = View.GONE
-    }
-
     cancelOption?.let { option ->
       cancelButton.text = option as String
       cancelButton.setOnClickListener {
@@ -175,10 +172,13 @@ internal class Sheet(context: Context, parameters: ReadableMap, private val call
   }
 
 
-  private inner class TextVH(itemView: View) :
+  private inner class OptionVH(itemView: View) :
     androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-    fun bind(text: String, isDestructive: Boolean, isDisabled: Boolean) {
-      val textView = itemView as TextView
+    fun bind(text: String, isDestructive: Boolean, isDisabled: Boolean, isLast: Boolean) {
+      val textView = itemView.findViewById<TextView>(R.id.text)
+      val divider = itemView.findViewById<View>(R.id.divider)
+
+      divider.visibility = if (isLast) View.GONE else View.VISIBLE
 
       textView.text = text
 
