@@ -135,13 +135,6 @@ const ShareButton = () => (
           subject: 'You search engine',
           message: "It's popular",
           excludedActivityTypes: ['com.android.bluetooth'],
-          android: {
-            dialogTitle: 'Share with',
-            includedActivityTypes: [
-              // 'com.facebook.katana',
-              // 'com.ghisler.android.TotalCommander'
-            ],
-          },
         },
         () => {}, //Failure callback
         () => {} //Success callback
@@ -152,7 +145,7 @@ const ShareButton = () => (
   </TouchableOpacity>
 );
 
-const Section = ({ title }) => (
+const Section = ({ title }: { title: string }) => (
   <View style={styles.section}>
     <View style={styles.line} />
     <Text style={styles.sectionTitle}>{title}</Text>
