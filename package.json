@@ -3,12 +3,12 @@
   "version": "3.0.0",
   "description": "ActionSheet for Android in React Native. Provides common interface in React Native to show ActionSheet on Android and iOS.",
   "source": "./src/index.tsx",
-  "main": "./src/index.tsx",
-  "types": "./scr/index.d.ts",
+  "main": "./lib/module/index.js",
+  "types": "./lib/typescript/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./scr/index.d.ts",
-      "default": "./src/index.tsx"
+      "types": "./lib/typescript/src/index.d.ts",
+      "default": "./lib/module/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -38,7 +38,7 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
-    "prepack": "tsc --project tsconfig.local.json",
+    "prepack": "bob build",
     "release": "release-it"
   },
   "keywords": [
