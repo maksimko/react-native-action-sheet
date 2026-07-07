@@ -37,7 +37,7 @@ private fun extract(data: ReadableMap?, field: String, defaultValue: Any?): Any?
     val value = data.getDynamic(field)
 
     when (value.type) {
-        ReadableType.Array -> return value.asArray().toArrayList()
+        ReadableType.Array -> return value.asArray()?.toArrayList()
         ReadableType.Map -> return value.asMap()
         ReadableType.Number -> return value.asInt()
         ReadableType.String -> return value.asString()

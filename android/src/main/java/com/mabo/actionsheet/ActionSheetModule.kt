@@ -47,14 +47,14 @@ class ActionSheetModule(reactContext: ReactApplicationContext) : ReactContextBas
         val url = parameters.get<String>("url")
         val dialogTitle = parameters.get<String>("android.dialogTitle")
 
-        val currentActivity = currentActivity
+        val currentActivity = reactApplicationContext.currentActivity
 
         if (currentActivity == null) {
             failureCallback?.invoke()
             return
         }
 
-        val pm = currentActivity.packageManager ?: return
+        val pm = reactApplicationContext.packageManager ?: return
 
         val intentBuilder = ShareCompat.IntentBuilder
                 .from(currentActivity)
